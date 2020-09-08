@@ -13,9 +13,9 @@ const $feed = $("#feed");
 const $showLogin = $("#show-login");
 const $showRegister = $("#show-reg");
 const $regBtn = $("#reg-btn");
-const $logBtn = $('#log-btn')
-const $createComment = $('#createComment')
-const $write = $('#write')
+const $logBtn = $("#log-btn");
+const $createComment = $("#createComment");
+const $write = $("#write");
 
 async function home() {
   token = localStorage.getItem("token");
@@ -26,9 +26,9 @@ async function home() {
     $login.hide();
     $register.hide();
     $feed.show();
-    $write.hide()
+    $write.hide();
   }
-  await getPhotoFeed()
+  await getPhotoFeed();
 }
 
 // Event listerns
@@ -44,17 +44,17 @@ $showRegister.on("click", (evt) => {
   $register.show();
 });
 
-$createComment.on('click', (evt) => {
+$createComment.on("click", (evt) => {
   evt.preventDefault();
-  $('#collapseComments').hide()
-  $write.show()
-})
+  $("#collapseComments").hide();
+  $write.show();
+});
 
-$('#cmt-cancel').on('click', (evt) => {
-  evt.preventDefault()
-  $write.hide()
-  $('#collapseComments').show()
-})
+$("#cmt-cancel").on("click", (evt) => {
+  evt.preventDefault();
+  $write.hide();
+  $("#collapseComments").show();
+});
 
 $regBtn.on("click", async (evt) => {
   // Registers a new user.
@@ -100,43 +100,45 @@ $regBtn.on("click", async (evt) => {
   }
 });
 
-$logBtn.on('click', async (evt) => {
+$logBtn.on("click", async (evt) => {
   // Logs a user in.
-  evt.preventDefault()
-  const username = $('#username-log').val();
-  const password = $('#password-log').val();
+  evt.preventDefault();
+  const username = $("#username-log").val();
+  const password = $("#password-log").val();
   // Checks if user inputs values.
   if (!username || !password) {
-    $('#username-logHelp').text('Username/Password is required!')
+    $("#username-logHelp").text("Username/Password is required!");
   }
   try {
     // Sends the request to login.
     const response = await axios.post(`${API}/api/users/login`, {
       username: username,
-      password: password
-    })
-    if (response.data.message === 'Authenticated') {
+      password: password,
+    });
+    if (response.data.message === "Authenticated") {
       // Sets local storage
       localStorage.setItem("token", response.data.data.token);
       localStorage.setItem("user_id", response.data.data.user.id);
-      $('#username-log').val("");
-      $('#password-log').val("");
-      $login.hide()
-      $feed.show()
+      $("#username-log").val("");
+      $("#password-log").val("");
+      $login.hide();
+      $feed.show();
     }
   } catch (e) {
-    $('#username-logHelp').text('Username/Password is incorrect, please try again!')
-    $('#username-log').val("");
-    $('#password-log').val("");
+    $("#username-logHelp").text(
+      "Username/Password is incorrect, please try again!"
+    );
+    $("#username-log").val("");
+    $("#password-log").val("");
   }
-})
+});
 
 async function getPhotoFeed() {
   try {
-    const response = await axios.get(`${API}/api/pictures`)
+    const response = await axios.get(`${API}/api/pictures`);
     response.data.data.pictures.forEach(async (p) => {
-      const user = await axios.get(`${API}/api/users/${p.user_id}`)
-      const likes = await axios.get(`${API}/api/likes/picture/${p.id}`)
+      const user = await axios.get(`${API}/api/users/${p.user_id}`);
+      const likes = await axios.get(`${API}/api/likes/picture/${p.id}`);
       const $item = `
       <div class="row justify-content-center">
         <div class="col-12 col-md-6 card border p-2 my-2">
@@ -154,8 +156,8 @@ async function getPhotoFeed() {
           </div>
           <div class="row my-3" id="picture">
             <div class="col">
-            <button class="pic-btn">
-              <img src="${p.picture_url}" alt="User ${user.data.data.user.username} picture" class="post-picture rounded" />
+            <button class="pic-btn" id="userPhoto">
+              <img src="${p.picture_url}" alt="User ${user.data.data.user.username} picture" class="post-picture rounded" data-id="${p.id}"/>
             </button>
             </div>
           </div>
@@ -165,9 +167,10 @@ async function getPhotoFeed() {
                 class="pic-btn"
                 type="button"
                 data-toggle="collapse"
-                data-target="#collapseLikes"
+                data-target="#collapseLikes${p.id}"
                 aria-expanded="false"
                 aria-controls="collapseLikes"
+                id="like${p.id}"
               >
                 <i class="far fa-heart"></i>
               </button>
@@ -178,7 +181,7 @@ async function getPhotoFeed() {
             </div>
           </div>
           <div class="collapse" id="collapseComments${p.id}"></div>
-          <div class="collapse" id="collapseLikes">
+          <div class="collapse" id="collapseLikes${p.id}">
             <div class="row justify-content-center align-items-center">
               <div class="col">
                 <p class="likes">${likes.data.data.count} Likes</p>
@@ -190,19 +193,19 @@ async function getPhotoFeed() {
             <form>
               <div class="form-group">
                 <label for="comment">Comment</label>
-                <input type="text" class="form-control" id="comment" aria-describedby="commentHelp">
+                <input type="text" class="form-control" id="comment${p.id}" aria-describedby="commentHelp">
               </div>
-              <button type="submit" class="btn btn-primary my-1">Submit</button>
+              <button type="submit" class="btn btn-primary my-1" id="cmt-submit" data-id="${p.id}">Submit</button>
             </form>
           </div>
         </div>
         </div>
-      </div>`
-      $feed.append($item)
+      </div>`;
+      $feed.append($item);
       // Creates and adds comments to the item above
-      const comments = await axios.get(`${API}/api/comments/picture/${p.id}`)
+      const comments = await axios.get(`${API}/api/comments/picture/${p.id}`);
       comments.data.data.comments.forEach(async (c) => {
-        const user = await axios.get(`${API}/api/users/${c.user_id}`)
+        const user = await axios.get(`${API}/api/users/${c.user_id}`);
         const $comment = `
         <div class="comments border rounded my-2">
           <div class="row border-bottom p-1 mt-1 align-items-center rounded">
@@ -212,16 +215,115 @@ async function getPhotoFeed() {
             </div>
             <div class="col-8 col-md-10 comment-post">
               <p>${c.comment}</p>
-              <p class="small">${Date(c.comment_date)}</p>
+              <p class="small">${c.comment_date}</p>
             </div>
           </div>
-        </div>`
-        $(`#collapseComments${p.id}`).append($comment)
-      })
-    })
+        </div>`;
+        $(`#collapseComments${p.id}`).append($comment);
+      });
+    });
   } catch (e) {
-    $('#alert').text('Opppps... Something went wrong').addClass('alert-danger').addClass('text-center')
+    $("#alert")
+      .text("Opppps... Something went wrong")
+      .addClass("alert-danger")
+      .addClass("text-center");
   }
 }
+
+$("body").on("click", "#cmt-submit", async (evt) => {
+  // Adds a commit from a user
+  evt.preventDefault();
+  const token = localStorage.getItem("token");
+  const photoId = $(evt.target).attr("data-id");
+  const comment = $(`#comment${photoId}`).val();
+  try {
+    await axios.post(`${API}/api/comments/`, {
+      _token: token,
+      data: {
+        comment,
+        picture_id: +photoId,
+      },
+    });
+    $(`#comment${photoId}`).val("");
+    $(`#collapseComments${photoId}`).text("");
+    // Creates and adds comments to the current comments
+    const comments = await axios.get(`${API}/api/comments/picture/${photoId}`);
+    comments.data.data.comments.forEach(async (c) => {
+      const user = await axios.get(`${API}/api/users/${c.user_id}`);
+      const $comment = `
+      <div class="comments border rounded my-2">
+        <div class="row border-bottom p-1 mt-1 align-items-center rounded">
+          <div class="col-2 col-md-1">
+            <img
+              src="${user.data.data.user.profile_picture_url}" alt="User profile ${user.data.data.user.username} picture" class="comment-pic rounded-circle"/>
+          </div>
+          <div class="col-8 col-md-10 comment-post">
+            <p>${c.comment}</p>
+            <p class="small">${c.comment_date}</p>
+          </div>
+        </div>
+      </div>`;
+      $(`#collapseComments${photoId}`).append($comment);
+    });
+  } catch (e) {
+    $("#alert")
+      .text("Opppps... Something went wrong")
+      .addClass("alert-danger")
+      .addClass("text-center");
+  }
+});
+
+$("body").on("dblclick", "#userPhoto", async (evt) => {
+  // Adds a like to a photo
+  evt.preventDefault();
+  const token = localStorage.getItem("token");
+  const photoId = $(evt.target).attr("data-id");
+  try {
+    // Checks if user likes photo already.
+    const answer = await axios.patch(`${API}/api/likes/check/${photoId}`, {
+      _token: token,
+    });
+    if (answer.data.data.answer === 0) {
+      // Sends request to like the post if the answer is no
+      await axios.post(`${API}/api/likes`, {
+        _token: token,
+        data: {
+          picture_id: +photoId,
+        },
+      });
+      const likes = await axios.get(`${API}/api/likes/picture/${photoId}`);
+      $(`#collapseLikes${photoId}`).text("");
+      $likes = `
+          <div class="row justify-content-center align-items-center">
+            <div class="col">
+              <p class="likes">${likes.data.data.count} Likes</p>
+            </div>
+          </div>`;
+      $(`#collapseLikes${photoId}`).append($likes);
+      $(`#like${photoId}`).text('')
+      $(`#like${photoId}`).append('<i class="fas fa-heart"></i>')
+    } else {
+      await axios.patch(`${API}/api/likes/${photoId}`, {
+        _token: token,
+      });
+      const likes = await axios.get(`${API}/api/likes/picture/${photoId}`);
+      $(`#collapseLikes${photoId}`).text("");
+      $likes = `
+          <div class="row justify-content-center align-items-center">
+            <div class="col">
+              <p class="likes">${likes.data.data.count} Likes</p>
+            </div>
+          </div>`;
+      $(`#collapseLikes${photoId}`).append($likes);
+      $(`#like${photoId}`).text('')
+      $(`#like${photoId}`).append('<i class="far fa-heart"></i>')
+    }
+  } catch (e) {
+    $("#alert")
+      .text("Opppps... Something went wrong")
+      .addClass("alert-danger")
+      .addClass("text-center");
+  }
+});
 
 home();
