@@ -15,18 +15,17 @@ const $showRegister = $("#show-reg");
 const $regBtn = $("#reg-btn");
 const $logBtn = $("#log-btn");
 const $createComment = $("#createComment");
-const $write = $("#write");
 
 async function home() {
   token = localStorage.getItem("token");
   if (token === null) {
     $feed.hide();
     $login.hide();
+    $(".nav-link").toggleClass("disabled");
   } else {
     $login.hide();
     $register.hide();
     $feed.show();
-    $write.hide();
   }
   await getPhotoFeed();
 }
@@ -48,12 +47,6 @@ $createComment.on("click", (evt) => {
   evt.preventDefault();
   $("#collapseComments").hide();
   $write.show();
-});
-
-$("#cmt-cancel").on("click", (evt) => {
-  evt.preventDefault();
-  $write.hide();
-  $("#collapseComments").show();
 });
 
 $regBtn.on("click", async (evt) => {
@@ -90,6 +83,7 @@ $regBtn.on("click", async (evt) => {
         $("#username-reg").val("");
         $register.hide();
         $feed.show();
+        $(".nav-link").toggleClass("disabled");
       }
     } catch (e) {
       $("#usernameHelp").text("Username already taken, please try again");
@@ -123,6 +117,7 @@ $logBtn.on("click", async (evt) => {
       $("#password-log").val("");
       $login.hide();
       $feed.show();
+      $(".nav-link").toggleClass("disabled");
     }
   } catch (e) {
     $("#username-logHelp").text(
@@ -237,6 +232,7 @@ $("body").on("click", "#cmt-submit", async (evt) => {
   const photoId = $(evt.target).attr("data-id");
   const comment = $(`#comment${photoId}`).val();
   try {
+    if (!comment) return;
     await axios.post(`${API}/api/comments/`, {
       _token: token,
       data: {
@@ -300,8 +296,8 @@ $("body").on("dblclick", "#userPhoto", async (evt) => {
             </div>
           </div>`;
       $(`#collapseLikes${photoId}`).append($likes);
-      $(`#like${photoId}`).text('')
-      $(`#like${photoId}`).append('<i class="fas fa-heart"></i>')
+      $(`#like${photoId}`).text("");
+      $(`#like${photoId}`).append('<i class="fas fa-heart"></i>');
     } else {
       await axios.patch(`${API}/api/likes/${photoId}`, {
         _token: token,
@@ -315,8 +311,8 @@ $("body").on("dblclick", "#userPhoto", async (evt) => {
             </div>
           </div>`;
       $(`#collapseLikes${photoId}`).append($likes);
-      $(`#like${photoId}`).text('')
-      $(`#like${photoId}`).append('<i class="far fa-heart"></i>')
+      $(`#like${photoId}`).text("");
+      $(`#like${photoId}`).append('<i class="far fa-heart"></i>');
     }
   } catch (e) {
     $("#alert")
