@@ -2,9 +2,10 @@
 const API = "http://localhost:3000";
 
 // Variables
-
 let token;
 let user_id;
+let reader = new FileReader();
+let imagebase64;
 
 // DOM selectors
 const $register = $("#register");
@@ -16,6 +17,16 @@ const $regBtn = $("#reg-btn");
 const $logBtn = $("#log-btn");
 const $createComment = $("#createComment");
 
+// Helps convert images to base64
+function encodeImageFileAsURL(element) {
+  const file = element.files[0];
+  reader.onloadend = function () {
+    imagebase64 = reader.result;
+  }
+  reader.readAsDataURL(file);
+}
+
+// Loads everytime the home screen refresh.
 async function home() {
   token = localStorage.getItem("token");
   if (token === null) {
@@ -77,7 +88,6 @@ $regBtn.on("click", async (evt) => {
       if (response.data.message === "Success") {
         // Sets local storage
         localStorage.setItem("token", response.data.data.token);
-        localStorage.setItem("user_id", response.data.data.user.id);
         $("#password-reg").val("");
         $("#confirm-password").val("");
         $("#username-reg").val("");
@@ -112,7 +122,6 @@ $logBtn.on("click", async (evt) => {
     if (response.data.message === "Authenticated") {
       // Sets local storage
       localStorage.setItem("token", response.data.data.token);
-      localStorage.setItem("user_id", response.data.data.user.id);
       $("#username-log").val("");
       $("#password-log").val("");
       $login.hide();
