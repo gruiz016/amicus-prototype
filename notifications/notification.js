@@ -1,4 +1,7 @@
+$('.spinner').hide()
+
 const getNotifications = async () => {
+    $('.spinner').show()
     const token = localStorage.getItem('token')
     try {
         const response = await axios.get(`${API}/api/notifications/${token}`)
@@ -24,7 +27,7 @@ const getNotifications = async () => {
                 </div>`
             $('.notifications').append($notification)
         })
-        $('.notifications').empty()
+        $('.spinner').hide()
     } catch (e) {
         $("#alert")
             .text("Opppps... Something went wrong")

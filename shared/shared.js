@@ -1,12 +1,15 @@
+$('.spinner').hide()
+
 const getPhotos = async () => {
-    const token = localStorage.getItem('token')
-    try {
-        const response = await axios.get(`${API}/api/notifications/${token}`)
-        response.data.data.notifications.forEach(async (n) => {
-            const picture = await axios.get(`${API}/api/pictures/${n.picture_id}`)
-            const user = await axios.get(`${API}/api/users/${picture.data.data.picture.user_id}`)
-            const likes = await axios.get(`${API}/api/likes/picture/${picture.data.data.picture.id}`);
-            const $item = `
+  $('.spinner').show()
+  const token = localStorage.getItem('token')
+  try {
+    const response = await axios.get(`${API}/api/notifications/${token}`)
+    response.data.data.notifications.forEach(async (n) => {
+      const picture = await axios.get(`${API}/api/pictures/${n.picture_id}`)
+      const user = await axios.get(`${API}/api/users/${picture.data.data.picture.user_id}`)
+      const likes = await axios.get(`${API}/api/likes/picture/${picture.data.data.picture.id}`);
+      const $item = `
             <div class="row justify-content-center">
               <div class="col-12 col-md-6 card border p-2 my-2">
                 <div class="row align-items-center" id="profile-info">
@@ -67,21 +70,21 @@ const getPhotos = async () => {
               </div>
               </div>
             </div>`;
-            $('.shared').append($item);
-            // Checks if user liked photo previously
-            const answer = await axios.patch(`${API}/api/likes/check/${picture.data.data.picture.id}`, {
-                _token: token,
-            });
-            if (answer.data.data.answer === 0) {
-                $(`#like${picture.data.data.picture.id}`).append('<i class="far fa-heart"></i>')
-            } else {
-                $(`#like${picture.data.data.picture.id}`).append('<i class="fas fa-heart"></i>')
-            }
-            // Creates and adds comments to the item above
-            const comments = await axios.get(`${API}/api/comments/picture/${picture.data.data.picture.id}`);
-            comments.data.data.comments.forEach(async (c) => {
-                const user = await axios.get(`${API}/api/users/${c.user_id}`);
-                const $comment = `
+      $('.shared').append($item);
+      // Checks if user liked photo previously
+      const answer = await axios.patch(`${API}/api/likes/check/${picture.data.data.picture.id}`, {
+        _token: token,
+      });
+      if (answer.data.data.answer === 0) {
+        $(`#like${picture.data.data.picture.id}`).append('<i class="far fa-heart"></i>')
+      } else {
+        $(`#like${picture.data.data.picture.id}`).append('<i class="fas fa-heart"></i>')
+      }
+      // Creates and adds comments to the item above
+      const comments = await axios.get(`${API}/api/comments/picture/${picture.data.data.picture.id}`);
+      comments.data.data.comments.forEach(async (c) => {
+        const user = await axios.get(`${API}/api/users/${c.user_id}`);
+        const $comment = `
             <div class="comments border rounded my-2">
             <div class="row border-bottom p-1 mt-1 align-items-center rounded">
                 <div class="col-2 col-md-1">
@@ -94,14 +97,14 @@ const getPhotos = async () => {
                 </div>
             </div>
             </div>`;
-                $(`#collapseComments${picture.data.data.picture.id}`).append($comment);
-            });
-            await axios.patch(`${API}/api/notifications/update/${n.id}/${token}`)
-        })
-        $('.shared').empty()
-    } catch (e) {
+        $(`#collapseComments${picture.data.data.picture.id}`).append($comment);
+      });
+      await axios.patch(`${API}/api/notifications/update/${n.id}/${token}`)
+    })
+    $('.spinner').hide()
+  } catch (e) {
 
-    }
+  }
 }
 
 getPhotos()

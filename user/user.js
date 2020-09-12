@@ -1,4 +1,7 @@
+$('.spinner').hide()
+
 const userProfile = async () => {
+    $('.spinner').show()
     const token = localStorage.getItem("token");
     try {
         const user = await axios.get(`${API}/api/users/profile/${token}`);
@@ -139,7 +142,7 @@ const userProfile = async () => {
                 })
             }
         });
-        $('#user').empty()
+        $('.spinner').hide()
     } catch (e) {
         $("#alert")
             .text("Opppps... Something went wrong")

@@ -15,6 +15,8 @@ const $regBtn = $("#reg-btn");
 const $logBtn = $("#log-btn");
 const $createComment = $("#createComment");
 
+$('.spinner').hide()
+
 // Helps convert images to base64
 function encodeImageFileAsURL(element) {
   const file = element.files[0];
@@ -137,6 +139,7 @@ $logBtn.on("click", async (evt) => {
 
 async function getPhotoFeed() {
   try {
+    $('.spinner').show()
     const response = await axios.get(`${API}/api/pictures`);
     response.data.data.pictures.forEach(async (p) => {
       const user = await axios.get(`${API}/api/users/${p.user_id}`);
@@ -232,7 +235,7 @@ async function getPhotoFeed() {
         $(`#collapseComments${p.id}`).append($comment);
       });
     });
-    $('#feed').empty()
+    $('.spinner').hide()
   } catch (e) {
     $("#alert")
       .text("Opppps... Something went wrong")

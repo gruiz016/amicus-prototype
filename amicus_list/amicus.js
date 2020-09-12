@@ -1,4 +1,7 @@
+$('.spinner').hide()
+
 const getAll = async () => {
+    $('.spinner').show()
     const token = localStorage.getItem('token')
     try {
         const response = await axios.get(`${API}/api/users/amicus/${token}`)
@@ -26,6 +29,7 @@ const getAll = async () => {
                 $(`#buttons${u.id}`).append($btn)
             }
         })
+        $('.spinner').hide()
     } catch (e) {
         $("#alert")
             .text("Opppps... Something went wrong")
