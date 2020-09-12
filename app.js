@@ -1,5 +1,5 @@
 // API URL
-const API = "http://localhost:3000";
+const API = "https://amicus-server.herokuapp.com";
 
 // Variables
 let reader = new FileReader();
