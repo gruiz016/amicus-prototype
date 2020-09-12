@@ -1,0 +1,14 @@
+.card {
+    -webkit-box-shadow: none;
+            box-shadow: none;
+}
+
+.btn-d {
+    cursor: not-allowed;
+    pointer-events: none;
+
+    /*Button disabled - CSS color class*/
+    color: #c0c0c0;
+    background-color: #ffffff;
+
+}

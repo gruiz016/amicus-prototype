@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amicus+ | Add Photo</title>
+    <title>Amicus+ | Notifications</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/simplex/bootstrap.min.css"
         integrity="sha384-FYrl2Nk72fpV6+l3Bymt1zZhnQFK75ipDqPXK0sOR0f/zeOSZ45/tKlsKucQyjSp" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
         integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
         crossorigin="anonymous" />
     <link rel="stylesheet" href="/app.css">
-    <link rel="stylesheet" href="/add_picture/picture.css">
+    <link rel="stylesheet" href="/notifications/notifications.css">
 </head>
 
 <body>
@@ -41,32 +41,12 @@
     </nav>
     <main class="container">
         <div class="alert" role="alert" id="alert"></div>
-        <div class="upload">
-            <h1 class="my-2 text-center">Upload your Photo now!</h1>
-            <form class="mt-5">
-                <small> Only PNG & JPEG/JPG are accepted. Videos are not supported YET.</small>
-                <div class="form-group">
-                    <input type="file" class="form-control" id="file" onchange="encodeImageFileAsURL(this)">
-                </div>
-            </form>
-            <p class="lead mt-3">Is this a Global Picture?</p>
-            <div class="btn-group btn-group-toggle mt-3" data-toggle="buttons">
-                <label class="btn btn-secondary active">
-                    <input type="radio" name="options" id="true" autocomplete="off"> Yes
-                </label>
-                <label class="btn btn-danger">
-                    <input type="radio" name="options" id="false" autocomplete="off"> No
-                </label>
-            </div>
-            <div class="row mt-2">
-                <small> If you select YES everyone can see it. If NO you must click the <i class="fas fa-share"></i>
-                    icon under your picture in your user profile to share with people on your Amicus+ list <i
-                        class="fas fa-user-friends"></i>.</small>
-            </div>
-            <div class="mt-1">
-                <button type="submit" class="btn btn-primary my-3" id="pic-submit">Submit</button>
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center">Your notifications</h1>
             </div>
         </div>
+        <div class="notifications"></div>
     </main>
     <footer class="fixed-bottom">
         <nav class="navbar navbar-light bg-light">
@@ -85,7 +65,7 @@
     </script>
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
     <script src="/app.js"></script>
-    <script src="/add_picture/picture.js"></script>
+    <script src="/notifications/notification.js"></script>
 </body>
 
 </html>

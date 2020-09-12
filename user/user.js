@@ -88,19 +88,58 @@ const userProfile = async () => {
                                 <p class="text-center">Comments</p>
                                 <p class="text-center">${comments.data.data.comments.length}</p>
                             </div>
-                            <div class="col-2">
+                            <div class="col-2 buttons${p.id}">
                                 <button class="dlt-photo" data-photoId="${p.id}">
                                     <i class="fas fa-trash" data-photoId="${p.id}"></i>
                                 </button>
                             </div>
                         </div>
+                        <div class="collapse" id="collapseExample${p.id}">
+                        <div class="share">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <p class="lead text-center">Who on your Amicus+ list do you want to share this photo with?</p>
+                                <div class="row amicusList${p.id} mt-2 scroll"></div>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>`;
             $(".myPhotos").append($pic);
+            // Builds amicus list if user deems picture private.
+            if (!p.global_share) {
+                const $btn = `
+                <button class="pic-btn" data-photoId="${p.id} type="button" data-toggle="collapse" data-target="#collapseExample${p.id}" aria-expanded="false" aria-controls="collapseExample${p.id}" id="sharePhoto">
+                    <i class="fas fa-share" data-photoId="${p.id}"></i>
+                </button>`
+                $(`.buttons${p.id}`).append($btn)
+                const response = await axios.get(`${API}/api/friends/${token}`)
+                // Creates a card for each user on user amicus list.
+                response.data.data.amicus.forEach(async (u) => {
+                    const user = await axios.get(`${API}/api/users/${u.added_user_id}`)
+                    const $card = `
+                    <div class="col-12 card">
+                        <div class="row p-2">
+                            <div class="col-4 align-self-center">
+                                <img src="${user.data.data.user.profile_picture_url}"
+                                    alt="${user.data.data.user.username} profile picture" class="amicus-photo rounded-circle item">
+                            </div>
+                            <div class="col-4 align-self-center">
+                                <p class="lead item">@${user.data.data.user.username}</p>
+                                <p>${user.data.data.user.about}</p>
+                            </div>
+                            <div class="col-4 align-self-center" id="userBtn${user.data.data.user.id}${p.id}">
+                                <button class="btn-primary item" id="share-user" data-user_id="${user.data.data.user.id}" data-pic_id="${p.id}">Share</button>
+                            </div>
+                        </div>
+                    </div>`
+                    $(`.amicusList${p.id}`).append($card)
+                })
+            }
         });
     } catch (e) {
-        console.log(e)
         $("#alert")
             .text("Opppps... Something went wrong")
             .addClass("alert-danger")
@@ -186,6 +225,49 @@ $('body').on('click', '.dlt-photo', async (evt) => {
         const response = await axios.delete(`${API}/api/pictures/delete/${$photoId}`)
         if (response.status == 200) {
             location.reload()
+        }
+    } catch (e) {
+        $("#alert")
+            .text("Opppps... Something went wrong")
+            .addClass("alert-danger")
+            .addClass("text-center");
+    }
+})
+
+$('body').on('click', '#sharePhoto', async (evt) => {
+    evt.preventDefault()
+    const token = localStorage.getItem('token')
+    const $picId = $(evt.target).attr('data-photoId')
+    try {
+        const response = await axios.get(`${API}/api/shares/${$picId}/${token}`)
+        if (response.data.data.users.length > 0) {
+            response.data.data.users.forEach(u => {
+                $(`#userBtn${u.user_id}${$picId}`).empty()
+            })
+        }
+    } catch (e) {
+        $("#alert")
+            .text("Opppps... Something went wrong")
+            .addClass("alert-danger")
+            .addClass("text-center");
+    }
+})
+
+$('body').on('click', '#share-user', async (evt) => {
+    evt.preventDefault()
+    const token = localStorage.getItem('token')
+    const $userId = $(evt.target).attr('data-user_id');
+    const $picId = $(evt.target).attr('data-pic_id');
+    try {
+        const response = await axios.post(`${API}/api/shares`, {
+            _token: token,
+            data: {
+                picture_id: +$picId,
+                user_id: +$userId
+            }
+        })
+        if (response.status === 200) {
+            $(`#userBtn${$userId}${$picId}`).empty()
         }
     } catch (e) {
         $("#alert")

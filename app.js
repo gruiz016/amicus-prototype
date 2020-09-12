@@ -2,8 +2,6 @@
 const API = "http://localhost:3000";
 
 // Variables
-let token;
-let user_id;
 let reader = new FileReader();
 let imagebase64;
 
@@ -176,7 +174,6 @@ async function getPhotoFeed() {
                 aria-controls="collapseLikes"
                 id="like${p.id}"
               >
-                <i class="far fa-heart"></i>
               </button>
               <button class="pic-btn" type="button" data-toggle="collapse" data-target="#collapseComments${p.id}"
               aria-expanded="false" aria-controls="collapseComments">
@@ -206,6 +203,15 @@ async function getPhotoFeed() {
         </div>
       </div>`;
       $feed.append($item);
+      // Checks if user liked photo previously
+      const answer = await axios.patch(`${API}/api/likes/check/${p.id}`, {
+        _token: token,
+      });
+      if (answer.data.data.answer === 0) {
+        $(`#like${p.id}`).append('<i class="far fa-heart"></i>')
+      } else {
+        $(`#like${p.id}`).append('<i class="fas fa-heart"></i>')
+      }
       // Creates and adds comments to the item above
       const comments = await axios.get(`${API}/api/comments/picture/${p.id}`);
       comments.data.data.comments.forEach(async (c) => {

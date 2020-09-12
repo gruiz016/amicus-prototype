@@ -6,13 +6,9 @@ p {
     margin: 0;
 }
 
-.item {
-    display: flex;
-    margin: auto;
-}
-
 .user-photo {
     width: 100px;
     height: 100px;
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
 }
