@@ -1,4 +1,7 @@
+$('.spinner').hide()
+
 $('#pic-submit').on('click', async (evt) => {
+    $('.spinner').show()
     evt.preventDefault()
     try {
         const token = localStorage.getItem('token');
@@ -37,6 +40,7 @@ $('#pic-submit').on('click', async (evt) => {
         if (response.status === 200) {
             location.replace('/amicus-prototype/user/user.html')
         }
+        $('.spinner').hide()
     } catch (e) {
         $("#alert")
             .text("Opppps... Something went wrong")

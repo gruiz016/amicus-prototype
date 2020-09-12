@@ -232,6 +232,7 @@ async function getPhotoFeed() {
         $(`#collapseComments${p.id}`).append($comment);
       });
     });
+    $('#feed').empty()
   } catch (e) {
     $("#alert")
       .text("Opppps... Something went wrong")

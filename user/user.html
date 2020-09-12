@@ -18,29 +18,38 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/amicus-prototype/index.html">Amicus+</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#amicusNav"
-          aria-controls="amicusNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+            aria-controls="amicusNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="amicusNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/amicus-prototype/add_picture/picture.html"><i class="fas fa-plus-square"></i></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/amicus-prototype/amicus_list/amicus.html"><i class="fas fa-user-friends"></i></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/amicus-prototype/notifications/notifications.html"><i class="far fa-envelope-open"></i></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/amicus-prototype/user/user.html"><i class="fas fa-user-circle"></i></a>
-            </li>
-          </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/amicus-prototype/add_picture/picture.html"><i
+                            class="fas fa-plus-square"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/amicus-prototype/amicus_list/amicus.html"><i
+                            class="fas fa-user-friends"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/amicus-prototype/notifications/notifications.html"><i
+                            class="far fa-envelope-open"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/amicus-prototype/user/user.html"><i class="fas fa-user-circle"></i></a>
+                </li>
+            </ul>
         </div>
-      </nav>
+    </nav>
     <main class="container">
         <div class="alert" role="alert" id="alert"></div>
-        <div class="row justify-content-center scroll-user" id="user"></div>
+        <div class="row justify-content-center scroll-user" id="user">
+            <div class="row justify-content-center my-2">
+                <div class="col-2">
+                    <div class="loader"></div>
+                </div>
+            </div>
+        </div>
     </main>
     <footer class="fixed-bottom">
         <nav class="navbar navbar-light bg-light">

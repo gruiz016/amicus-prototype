@@ -98,6 +98,7 @@ const getPhotos = async () => {
             });
             await axios.patch(`${API}/api/notifications/update/${n.id}/${token}`)
         })
+        $('.shared').empty()
     } catch (e) {
 
     }

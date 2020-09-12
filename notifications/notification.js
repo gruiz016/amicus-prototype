@@ -24,6 +24,7 @@ const getNotifications = async () => {
                 </div>`
             $('.notifications').append($notification)
         })
+        $('.notifications').empty()
     } catch (e) {
         $("#alert")
             .text("Opppps... Something went wrong")

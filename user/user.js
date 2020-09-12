@@ -139,6 +139,7 @@ const userProfile = async () => {
                 })
             }
         });
+        $('#user').empty()
     } catch (e) {
         $("#alert")
             .text("Opppps... Something went wrong")
