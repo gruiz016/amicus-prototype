@@ -35,7 +35,7 @@ $('#pic-submit').on('click', async (evt) => {
         })
         // redirects after succesful commit
         if (response.status === 200) {
-            location.replace('/user/user.html')
+            location.replace('/amicus-prototype/user/user.html')
         }
     } catch (e) {
         $("#alert")

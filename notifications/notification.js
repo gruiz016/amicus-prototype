@@ -34,7 +34,7 @@ const getNotifications = async () => {
 
 $('body').on('click', '#view-noti', async (evt) => {
     evt.preventDefault()
-    location.replace('/shared/shared.html')
+    location.replace('/amicus-prototype/shared/shared.html')
 })
 
 getNotifications()

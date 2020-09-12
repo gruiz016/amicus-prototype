@@ -151,7 +151,7 @@ $("body").on("click", "#lg-btn", (evt) => {
     evt.preventDefault();
     localStorage.clear();
     location.reload();
-    location.replace("/index.html");
+    location.replace("/amicus-prototype/index.html");
 });
 
 $("body").on("click", "#edt-submit", async (evt) => {
