@@ -93,7 +93,7 @@ const getPhotos = async () => {
                 </div>
                 <div class="col-8 col-md-10 comment-post">
                 <p>${c.comment}</p>
-                <p class="small">${c.comment_date}</p>
+                <p class="small">${new Date(c.comment_date)}</p>
                 </div>
             </div>
             </div>`;
